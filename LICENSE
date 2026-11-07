@@ -1,0 +1,23 @@
+Copyright (c) 2026 Wandraker (Onelsey). All rights reserved.
+
+This repository contains the public website of OneDPI. The texts, design,
+layout, styles, scripts, the OneDPI name and logo, icons and application
+screenshots in this repository are the property of Wandraker (Onelsey).
+
+No permission is granted to copy, modify, publish, distribute, sublicense or
+sell any part of this repository, in whole or in part, without prior written
+permission from the copyright holder. Viewing the website in a browser and
+linking to it are permitted.
+
+The source code of the OneDPI application is not part of this repository and
+is not published.
+
+Third-party components referenced by the website keep their own licenses:
+
+- Tektur and Geologica typefaces, loaded from Google Fonts,
+  SIL Open Font License 1.1.
+- ByeDPI by hufrea, MIT License; hev-socks5-tunnel by heiher, MIT License;
+  WireGuard for Android, Apache License 2.0. These are mentioned on the site
+  as components used inside the application.
+
+OneDPI is an independent project and is not affiliated with the ByeByeDPI team.
