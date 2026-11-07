@@ -83,11 +83,47 @@ p { margin: 0 0 1em; max-width: var(--measure); }
 .site-head .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 4rem; }
 .brand { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; font-family: var(--display); font-weight: 800; font-size: 1.2rem; }
 .brand img { width: 2rem; height: 2rem; }
-.site-nav { display: flex; gap: clamp(0.75rem, 2.5vw, 1.75rem); flex-wrap: wrap; justify-content: flex-end; }
-.site-nav a { text-decoration: none; font-size: 0.95rem; color: var(--muted); }
-.site-nav a:hover, .site-nav a[aria-current="page"] { color: var(--ink); }
-.theme-toggle { background: none; border: 1px solid var(--rule); color: var(--muted); border-radius: 999px; padding: 0.2rem 0.7rem; font: inherit; font-size: 0.85rem; cursor: pointer; }
-.theme-toggle:hover { color: var(--ink); border-color: var(--muted); }
+.head-actions { display: flex; align-items: center; gap: 0.75rem; }
+.head-cta {
+  font-family: var(--display); font-weight: 700; font-stretch: 90%; text-decoration: none;
+  background: var(--signal); color: var(--signal-ink); padding: 0.45rem 0.9rem; border-radius: 0.35rem;
+}
+.head-cta:hover { text-decoration: none; filter: brightness(1.05); }
+.menu-btn {
+  display: inline-flex; align-items: center; gap: 0.45rem; cursor: pointer;
+  font: inherit; font-size: 0.95rem; color: var(--ink);
+  background: transparent; border: 1px solid var(--rule); border-radius: 0.35rem; padding: 0.4rem 0.75rem;
+}
+.menu-btn:hover { border-color: var(--muted); }
+.menu-btn svg { width: 1.2rem; height: 1.2rem; }
+
+.drawer {
+  margin: 0 0 0 auto; height: 100dvh; max-height: 100dvh; width: min(24rem, 100vw); max-width: 100vw;
+  border: 0; border-left: 1px solid var(--rule); padding: 0;
+  background: var(--paper); color: var(--ink);
+  display: none; flex-direction: column;
+}
+.drawer[open] { display: flex; }
+.drawer::backdrop { background: rgba(23, 19, 58, 0.45); }
+.drawer-head { display: flex; align-items: center; justify-content: space-between; min-height: 4rem; padding: 0 1.25rem; border-bottom: 1px solid var(--rule); }
+.drawer-title { font-family: var(--display); font-weight: 800; font-size: 1.2rem; }
+.drawer-nav { display: grid; padding: 1rem 0; overflow-y: auto; }
+.drawer-nav a {
+  font-family: var(--display); font-weight: 700; font-stretch: 85%; font-size: 1.6rem; line-height: 1.1;
+  text-decoration: none; padding: 0.75rem 1.25rem; border-left: 4px solid transparent;
+}
+.drawer-nav a:hover { background: var(--paper-2); }
+.drawer-nav a[aria-current="page"] { border-left-color: var(--signal); background: var(--paper-2); }
+.drawer-foot { margin-top: auto; padding: 1.25rem; border-top: 1px solid var(--rule); }
+.theme-toggle { background: none; border: 1px solid var(--rule); color: var(--ink); border-radius: 0.35rem; padding: 0.5rem 0.9rem; font: inherit; font-size: 0.95rem; cursor: pointer; }
+.theme-toggle:hover { border-color: var(--muted); }
+@media (prefers-reduced-motion: no-preference) {
+  .drawer[open] { animation: drawer-in 0.22s cubic-bezier(.2,.8,.2,1); }
+  .drawer[open]::backdrop { animation: fade-in 0.22s ease; }
+}
+@keyframes drawer-in { from { transform: translateX(100%); } to { transform: none; } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+body.drawer-open { overflow: hidden; }
 
 .hero { padding: clamp(3rem, 9vw, 7rem) 0 clamp(2.5rem, 6vw, 5rem); }
 .split-word {
@@ -204,28 +240,81 @@ details.more ul { margin: 0.5rem 0 0; padding-left: 1.1rem; color: var(--muted);
 .site-foot h3 { color: var(--ink); font-size: 1.05rem; margin-bottom: 0.5rem; }
 .site-foot p { margin: 0 0 0.4rem; }
 
-.doc { display: grid; grid-template-columns: 14rem 1fr; gap: clamp(2rem, 5vw, 4rem); padding: clamp(3rem, 7vw, 5rem) 0; }
-.doc-nav { position: sticky; top: 1.5rem; align-self: start; display: grid; gap: 0.5rem; font-size: 0.95rem; }
-.doc-nav a { text-decoration: none; color: var(--muted); }
-.doc-nav a:hover { color: var(--ink); }
-.doc article { max-width: 42rem; }
-.doc article h1 { font-size: clamp(2.6rem, 7vw, 4.2rem); font-stretch: 78%; margin-bottom: 1rem; }
-.doc article h2 { font-size: clamp(1.6rem, 3.5vw, 2.1rem); margin: 3rem 0 1rem; scroll-margin-top: 1.5rem; }
-.doc article ol, .doc article ul { padding-left: 1.2rem; max-width: var(--measure); }
-.doc article li { margin-bottom: 0.5rem; }
-.doc dl { display: grid; gap: 1rem; margin: 0; }
-.doc dt { font-family: var(--display); font-weight: 700; font-stretch: 90%; }
-.doc dd { margin: 0.2rem 0 0; color: var(--muted); max-width: var(--measure); }
+.page-title { font-size: clamp(2.6rem, 7vw, 4.4rem); font-stretch: 78%; }
+.more-link {
+  display: inline-block; margin-top: 0.5rem; font-family: var(--display); font-weight: 700; font-stretch: 90%; font-size: 1.15rem;
+  text-decoration: none; padding: 0.7rem 1.1rem; border: 2px solid var(--ink); border-radius: 0.4rem;
+}
+.more-link:hover { background: var(--ink); color: var(--paper); text-decoration: none; }
+.timeline-short { margin-bottom: 1.5rem; }
+.timeline-short > li:first-child { padding-bottom: 0.5rem; }
 
-@media (max-width: 52rem) {
-  .doc { grid-template-columns: 1fr; }
-  .doc-nav { position: static; grid-auto-flow: column; overflow-x: auto; gap: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--rule); }
-  .doc-nav a { white-space: nowrap; }
+.wiki-grid { display: grid; grid-template-columns: 15rem minmax(0, 1fr) 13rem; gap: clamp(1.5rem, 4vw, 3rem); padding-top: clamp(2rem, 5vw, 3.5rem); padding-bottom: clamp(3rem, 7vw, 5rem); align-items: start; }
+.wiki-grid.wiki-home { grid-template-columns: 15rem minmax(0, 1fr); }
+.wiki-side { position: sticky; top: 1rem; max-height: calc(100dvh - 2rem); overflow-y: auto; font-size: 0.95rem; }
+.wiki-side-toggle > summary { display: none; }
+.wiki-search { display: flex; align-items: center; gap: 0.4rem; border: 1px solid var(--rule); border-radius: 0.35rem; padding: 0.35rem 0.55rem; margin-bottom: 1rem; background: var(--paper); }
+.wiki-search:focus-within { border-color: var(--ink); }
+.wiki-search svg { width: 1rem; height: 1rem; color: var(--muted); flex: none; }
+.wiki-search input { border: 0; background: none; font: inherit; color: var(--ink); width: 100%; min-width: 0; outline: none; }
+.wiki-search kbd { font: inherit; font-size: 0.75rem; color: var(--muted); border: 1px solid var(--rule); border-radius: 3px; padding: 0 0.3rem; white-space: nowrap; }
+.wiki-group { margin-bottom: 1.1rem; display: grid; }
+.wiki-group-title { display: flex; align-items: center; gap: 0.45rem; margin: 0 0 0.35rem; font-family: var(--display); font-weight: 700; font-stretch: 90%; color: var(--ink); }
+.wiki-group-title svg, .wiki-section-title svg { width: 1.1rem; height: 1.1rem; color: var(--signal); flex: none; }
+.wiki-group a { text-decoration: none; color: var(--muted); padding: 0.25rem 0 0.25rem 0.8rem; border-left: 2px solid var(--rule); }
+.wiki-group a:hover { color: var(--ink); border-left-color: var(--muted); }
+.wiki-group a[aria-current="page"] { color: var(--ink); border-left-color: var(--signal); font-weight: 500; }
+.wiki-empty { color: var(--muted); }
+.wiki-content { min-width: 0; max-width: 44rem; }
+.wiki-head h1 { font-size: clamp(2.4rem, 6vw, 3.8rem); font-stretch: 78%; margin-bottom: 0.75rem; }
+.wiki-head .lead { font-size: 1.2rem; color: var(--muted); margin-bottom: 2rem; }
+.wiki-content h2 { font-size: clamp(1.5rem, 3.2vw, 2rem); margin: 2.5rem 0 0.9rem; scroll-margin-top: 1rem; }
+.wiki-content h3 { margin: 1.75rem 0 0.6rem; }
+.wiki-content ol, .wiki-content ul { padding-left: 1.25rem; max-width: var(--measure); margin: 0 0 1em; }
+.wiki-content li { margin-bottom: 0.45rem; }
+.wiki-content code { font-size: 0.92em; background: var(--paper-2); padding: 0.05em 0.35em; border-radius: 3px; }
+.wiki-content .note { border-left: 4px solid var(--signal); background: var(--paper-2); padding: 0.8rem 1rem; border-radius: 0 0.35rem 0.35rem 0; }
+.wiki-section { margin-bottom: 2.25rem; }
+.wiki-section-title { display: flex; align-items: center; gap: 0.5rem; font-size: 1.5rem; margin-bottom: 0.9rem; }
+.wiki-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); gap: 0.75rem; }
+.wiki-card { display: grid; gap: 0.25rem; text-decoration: none; padding: 0.9rem 1rem; border: 1px solid var(--rule); border-left: 4px solid var(--packet); border-radius: 0.35rem; background: var(--paper); }
+.wiki-card:hover { border-left-color: var(--signal); text-decoration: none; }
+.wiki-card-title { font-family: var(--display); font-weight: 700; font-stretch: 90%; font-size: 1.1rem; }
+.wiki-card-hint { color: var(--muted); font-size: 0.92rem; }
+.wiki-pager { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); }
+.wiki-pager a { display: grid; gap: 0.15rem; text-decoration: none; padding: 0.75rem 1rem; border: 1px solid var(--rule); border-radius: 0.35rem; font-family: var(--display); font-weight: 700; font-stretch: 90%; }
+.wiki-pager a span { font-family: var(--text); font-weight: 400; font-size: 0.85rem; color: var(--muted); }
+.wiki-pager a:hover { border-color: var(--ink); text-decoration: none; }
+.wiki-pager .next { grid-column: 2; text-align: right; }
+.wiki-toc { position: sticky; top: 1rem; font-size: 0.9rem; }
+.wiki-toc-title { font-family: var(--display); font-weight: 700; font-stretch: 90%; margin-bottom: 0.5rem; }
+.wiki-toc nav { display: grid; gap: 0.35rem; }
+.wiki-toc a { text-decoration: none; color: var(--muted); }
+.wiki-toc a:hover, .wiki-toc a.active { color: var(--ink); }
+
+.screens { grid-auto-flow: row; grid-template-columns: repeat(4, minmax(0, 1fr)); overflow: visible; scroll-snap-type: none; }
+
+@media (max-width: 64rem) {
+  .wiki-grid { grid-template-columns: 14rem minmax(0, 1fr); }
+  .wiki-toc { display: none; }
+}
+
+@media (max-width: 48rem) {
+  .wiki-grid, .wiki-grid.wiki-home { grid-template-columns: 1fr; gap: 1.5rem; }
+  .wiki-side { position: static; max-height: none; overflow: visible; }
+  .wiki-side-toggle { border: 1px solid var(--rule); border-radius: 0.4rem; padding: 0 1rem; }
+  .wiki-side-toggle > summary { display: block; cursor: pointer; padding: 0.8rem 0; font-family: var(--display); font-weight: 700; font-stretch: 90%; }
+  .wiki-side-toggle[open] > summary { border-bottom: 1px solid var(--rule); margin-bottom: 1rem; }
+  .wiki-search kbd { display: none; }
+  .screens { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 36rem) {
   body { font-size: 1rem; }
-  .site-nav .hide-sm { display: none; }
+  .menu-btn span { display: none; }
+  .menu-btn { padding: 0.45rem; }
   .lane { grid-template-columns: 1fr; gap: 0.4rem; }
   .packet b { height: 1.8rem; font-size: 0.95rem; min-width: 1.25em; }
+  .wiki-pager { grid-template-columns: 1fr; }
+  .wiki-pager .next { grid-column: 1; }
 }

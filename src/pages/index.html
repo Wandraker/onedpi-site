@@ -1,0 +1,85 @@
+<section class="hero">
+    <div class="wrap">
+      <h1 class="split-word" aria-label="OneDPI">
+        <span class="seg seg-1" aria-hidden="true">On</span><span class="seg seg-2" aria-hidden="true">eD</span><span class="seg seg-3" aria-hidden="true">PI</span>
+      </h1>
+      <p class="lede">Обходит блокировки прямо на телефоне. Без серверов, без аккаунта и без настройки: нажал «Подключить», и приложение само подбирает способ под твою сеть.</p>
+      <div class="hero-actions">
+        <a class="button" href="https://t.me/OneDPI">Скачать в Telegram-канале</a>
+        <p class="hero-note">Android 7.0 и новее, телефоны и Android TV. Бесплатно.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band section" id="how">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Что видит провайдер</h2>
+        <p>Фильтр провайдера читает начало каждого соединения и ищет там адрес сайта. OneDPI нарезает это начало так, чтобы фильтр не смог его прочитать, а сайт получил всё как обычно.</p>
+      </div>
+
+      <div class="demo" data-demo>
+        <div class="demo-tabs" role="tablist" aria-label="Пример соединения">
+          <button type="button" role="tab" aria-selected="true" aria-controls="stage" data-case="plain">Без OneDPI</button>
+          <button type="button" role="tab" aria-selected="false" aria-controls="stage" data-case="split">С OneDPI</button>
+          <button type="button" role="tab" aria-selected="false" aria-controls="stage" data-case="ip">Блокировка по адресу</button>
+        </div>
+
+        <div class="stage" id="stage" role="tabpanel" aria-live="polite">
+          <div class="lane">
+            <span class="lane-name">Телефон отправляет</span>
+            <div class="packets" data-packets></div>
+          </div>
+          <div class="inspector">
+            <span class="verdict" data-verdict></span>
+            <p data-explain></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Честно о возможностях</h2>
+        <p>Локальный обход хорош против одного вида блокировок. Против остальных нужен внешний сервер, и приложение не будет делать вид, что это не так.</p>
+      </div>
+      <div class="limits">
+        <div class="yes">
+          <h3>Помогает</h3>
+          <ul>
+            <li><strong>Сайты и YouTube</strong>, которые провайдер режет по содержимому соединения.</li>
+            <li><strong>Разные сети.</strong> Smart подбирает способ отдельно для домашнего Wi-Fi и для мобильной сети и запоминает его.</li>
+            <li><strong>Приватность.</strong> Весь трафик обрабатывается на телефоне. Нет нашего сервера, нет аккаунта, нет телеметрии.</li>
+            <li><strong>Исключения.</strong> Банки и другие приложения можно пустить мимо OneDPI.</li>
+          </ul>
+        </div>
+        <div class="no">
+          <h3>Не поможет</h3>
+          <ul>
+            <li><strong>Блокировка по адресу.</strong> Если до серверов не доходит ни один пакет, менять нечего. Так у многих операторов сейчас с Telegram.</li>
+            <li><strong>Белые списки</strong> на мобильной сети, когда разрешено только заранее одобренное.</li>
+            <li><strong>Замедление целых подсетей.</strong> Скорость от провайдера локально не вернуть.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band section" id="screens">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Одна кнопка</h2>
+        <p>Главный экран для того, чтобы включить и забыть. Подробности — на вкладке диагностики, если интересно, что происходит с сетью.</p>
+      </div>
+      <div class="screens">
+        <figure><img src="assets/img/screens/home.webp" alt="Главный экран OneDPI с кнопкой подключения" loading="lazy" width="540" height="1125"><figcaption>Главный экран</figcaption></figure>
+        <figure><img src="assets/img/screens/connected.webp" alt="OneDPI подключён в режиме Smart" loading="lazy" width="540" height="1125"><figcaption>Подключено, Smart выбрал способ</figcaption></figure>
+        <figure><img src="assets/img/screens/diagnostics.webp" alt="Экран диагностики сети" loading="lazy" width="540" height="1125"><figcaption>Диагностика сети</figcaption></figure>
+        <figure><img src="assets/img/screens/settings.webp" alt="Экран настроек и исключений приложений" loading="lazy" width="540" height="1125"><figcaption>Настройки и исключения</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  {{versions_latest}}
