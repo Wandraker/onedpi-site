@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Справка OneDPI</title>
+  <meta name="description" content="Как установить OneDPI, что значат статусы, почему может не работать Telegram, исключения приложений и Android TV.">
+  <meta name="theme-color" content="#17133A">
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@300..700&family=Tektur:wdth,wght@75..100,400..900&display=swap">
+  <link rel="stylesheet" href="assets/site.css">
+  <script>try{var t=localStorage.getItem("onedpi-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#main">К содержимому</a>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="brand" href="./"><img src="assets/icon.svg" alt="" width="32" height="32">OneDPI</a>
+    <nav class="site-nav" aria-label="Разделы">
+      <a class="hide-sm" href="./#how">Как работает</a>
+      <a href="./#versions">Версии</a>
+      <a href="help.html" aria-current="page">Справка</a>
+      <a class="hide-sm" href="https://t.me/ByeDPI_Channel">Telegram</a>
+      <button class="theme-toggle" type="button" data-theme-toggle>Тема</button>
+    </nav>
+  </div>
+</header>
+
+<main id="main" class="wrap">
+  <div class="doc">
+    <nav class="doc-nav" aria-label="Разделы справки">
+      <a href="#install">Установка</a>
+      <a href="#first">Первое включение</a>
+      <a href="#statuses">Что значат статусы</a>
+      <a href="#telegram">Не работает Telegram</a>
+      <a href="#exclude">Исключения приложений</a>
+      <a href="#tv">Android TV</a>
+      <a href="#privacy">Что приложение знает</a>
+    </nav>
+
+    <article>
+      <h1>Справка</h1>
+      <p>Коротко о том, как поставить OneDPI и что делать, если что-то работает не так.</p>
+
+      <h2 id="install">Установка</h2>
+      <ol>
+        <li>Скачай APK из <a href="https://t.me/ByeDPI_Channel">Telegram-канала</a>. Другие источники могут подменить файл.</li>
+        <li>Открой файл. Android попросит разрешить установку из этого источника — разреши для браузера или Telegram.</li>
+        <li>Если стоит старая версия и установка не идёт, удали её и поставь заново. Так бывает, когда меняется ключ подписи.</li>
+      </ol>
+
+      <h2 id="first">Первое включение</h2>
+      <p>Нажми «Подключить». Android спросит, можно ли OneDPI создать VPN, — это нужно, чтобы пропускать трафик через приложение. Данные никуда не уходят: VPN локальный, внутри телефона.</p>
+      <p>В первый раз Smart проверяет несколько способов обхода. Это занимает до минуты. Потом он запоминает результат для этой сети и подключается сразу.</p>
+
+      <h2 id="statuses">Что значат статусы</h2>
+      <dl>
+        <div><dt>Подключено</dt><dd>Всё работает, способ обхода выбран.</dd></div>
+        <div><dt>Ожидание сети</dt><dd>Интернета нет совсем. Приложение подождёт и продолжит само, ничего нажимать не нужно.</dd></div>
+        <div><dt>Восстановление соединения</dt><dd>Сеть сменилась или что-то перестало открываться. Приложение подбирает способ заново.</dd></div>
+        <div><dt>Переобучить для этой сети</dt><dd>Кнопка на вкладке диагностики, если сайты перестали открываться на привычной сети. Сбрасывает выбранный способ только для этой сети и запускает подбор заново.</dd></div>
+      </dl>
+
+      <h2 id="telegram">Не работает Telegram</h2>
+      <p>У многих операторов Telegram блокируют по адресам его серверов. Пакеты до них не доходят вообще, а локальный обход умеет только менять форму пакетов, но не их маршрут. Поэтому здесь он не поможет, и это не поломка приложения.</p>
+      <p>Что работает в этом случае: встроенный прокси в самом Telegram или VPN с внешним сервером.</p>
+
+      <h2 id="exclude">Исключения приложений</h2>
+      <p>В настройках можно выбрать приложения, которые пойдут мимо OneDPI напрямую. Это полезно для банков, госуслуг и всего, что ругается на VPN. Исключения применяются при следующем подключении.</p>
+
+      <h2 id="tv">Android TV</h2>
+      <p>OneDPI работает на Android TV и Google TV. Кнопка подключения выбрана сразу, достаточно нажать «ОК» на пульте. Навигация по разделам — слева.</p>
+
+      <h2 id="privacy">Что приложение знает</h2>
+      <ul>
+        <li>Нет аккаунта, нет сервера OneDPI, нет аналитики.</li>
+        <li>Сети различаются по зашифрованному отпечатку, который хранится только на телефоне.</li>
+        <li>Кнопка «Скопировать безопасный отчёт» на вкладке диагностики собирает отчёт для поддержки без IP-адресов, DNS, отпечатка сети и внутреннего журнала. Его можно прочитать, прежде чем куда-то отправлять.</li>
+      </ul>
+    </article>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div>
+      <h3>OneDPI</h3>
+      <p>© 2026 Wandraker (Onelsey).</p>
+      <p>Независимый проект. Не связан с командой ByeByeDPI.</p>
+    </div>
+    <div>
+      <h3>Связь</h3>
+      <p><a href="https://t.me/ByeDPI_Channel">Канал в Telegram</a> — релизы и новости.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/site.js"></script>
+</body>
+</html>
