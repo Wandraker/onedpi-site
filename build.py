@@ -307,6 +307,38 @@ def page(body: str, title: str, desc: str, root: str, current: str) -> str:
 """
 
 
+SITE_ROOT = "/onedpi-site/"
+
+
+def not_found_page(root: str) -> str:
+    return f"""<section class="section notfound">
+  <div class="wrap">
+    <p class="notfound-code" aria-hidden="true">404</p>
+    <h1>Такой страницы нет</h1>
+    <p class="lede">Возможно, она была удалена или переименована, а ссылка устарела. Либо в адресе опечатка.</p>
+    <ul class="notfound-links">
+      <li><a class="button" href="{root}">На главную</a></li>
+      <li><a href="{root}wiki/">Вики: ответы на частые вопросы</a></li>
+      <li><a href="{root}versions.html">Все версии</a></li>
+      <li><a href="{CHANNEL}">Спросить в Telegram-канале</a></li>
+    </ul>
+  </div>
+</section>"""
+
+
+def moved_page(target: str, label: str) -> str:
+    return f"""<section class="section notfound">
+  <div class="wrap">
+    <h1>Страница переехала</h1>
+    <p class="lede">Этого раздела здесь больше нет. То, что в нём было, теперь в разделе «{label}».</p>
+    <ul class="notfound-links">
+      <li><a class="button" href="{target}">Открыть «{label}»</a></li>
+      <li><a href="./">На главную</a></li>
+    </ul>
+  </div>
+</section>"""
+
+
 def redirect(target: str) -> str:
     return f"""<!doctype html>
 <html lang="ru"><head><meta charset="utf-8"><title>OneDPI</title>
@@ -346,7 +378,12 @@ def main():
         search[slug] = f'{a["title"]} {a["hint"]} {a.get("keywords", "")} {a["text"]}'.lower()
     (DIST / "wiki" / "search.json").write_text(json.dumps(search, ensure_ascii=False), encoding="utf-8")
 
-    (DIST / "help.html").write_text(redirect("wiki/"), encoding="utf-8")
+    # GitHub Pages serves 404.html for any unknown address at any depth, so links are absolute.
+    (DIST / "404.html").write_text(page(not_found_page(SITE_ROOT), "Страница не найдена",
+        "Такой страницы на сайте OneDPI нет.", SITE_ROOT, "404"), encoding="utf-8")
+    # The old help page moved to the wiki: say so instead of silently jumping there.
+    (DIST / "help.html").write_text(page(moved_page("wiki/", "Вики"), "Страница переехала",
+        "Справка OneDPI теперь в вики.", "", "moved"), encoding="utf-8")
     shutil.copy(ROOT / "LICENSE", DIST / "LICENSE")
     (DIST / ".nojekyll").write_text("", encoding="utf-8")
     print(f"built {len(order)} wiki pages, {len(versions)} versions -> {DIST}")

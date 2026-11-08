@@ -331,3 +331,8 @@ details.more ul { margin: 0.5rem 0 0; padding-left: 1.1rem; color: var(--muted);
 .checksum summary { cursor: pointer; width: fit-content; }
 .checksum p { margin: 0.5rem 0 0; }
 .checksum .sha { display: block; word-break: break-all; color: var(--ink); background: var(--paper-2); padding: 0.5rem 0.65rem; border-radius: 0.3rem; font-size: 0.85rem; }
+
+.notfound { min-height: 60vh; }
+.notfound-code { font-family: var(--display); font-weight: 800; font-stretch: 75%; font-size: clamp(5rem, 22vw, 11rem); line-height: 0.9; margin: 0 0 1rem; color: var(--signal); letter-spacing: -0.02em; }
+.notfound h1 { margin-bottom: 0.75rem; }
+.notfound-links { list-style: none; padding: 0; margin: 2rem 0 0; display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.75rem; }
