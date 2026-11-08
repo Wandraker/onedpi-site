@@ -208,6 +208,13 @@ body.drawer-open { overflow: hidden; }
 .limits .yes li::before { background: var(--pass); }
 .limits .no li::before { background: var(--signal); }
 .limits strong { font-weight: 600; }
+.beyond { margin-top: clamp(2.5rem, 6vw, 4rem); padding: clamp(1.5rem, 4vw, 2.25rem); border-radius: 0.9rem; background: var(--ink); color: var(--paper); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.25rem 2rem; }
+.beyond > div { max-width: 38rem; }
+.beyond h3 { color: var(--paper); margin-bottom: 0.5rem; }
+.beyond p { margin: 0; color: color-mix(in srgb, var(--paper) 82%, transparent); }
+.beyond strong { color: var(--packet); font-weight: 600; }
+.button-light { background: var(--packet); color: var(--packet-ink); box-shadow: 0.25rem 0.25rem 0 var(--signal); }
+.button-light:hover { box-shadow: 0.35rem 0.35rem 0 var(--signal); }
 
 .screens { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(13rem, 1fr); gap: clamp(1rem, 3vw, 2rem); overflow-x: auto; padding-bottom: 1rem; scroll-snap-type: x mandatory; }
 .screens figure { margin: 0; scroll-snap-align: start; }

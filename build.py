@@ -16,6 +16,8 @@ DIST = ROOT / "dist"
 CHANNEL = "https://t.me/OneDPI"
 REPO = "https://github.com/Wandraker/onedpi-site"
 APK = f"{REPO}/releases/latest/download/OneDPI.apk"
+# Платный VPN той же команды. Когда появится бот, заменить на ссылку t.me/<бот>.
+BYEVPN = "https://byevpn.byevpn.workers.dev/"
 RELEASE = json.loads((Path(__file__).resolve().parent / "src" / "release.json").read_text(encoding="utf-8"))
 SITE = "https://wandraker.github.io/onedpi-site/"
 FONTS = "https://fonts.googleapis.com/css2?family=Geologica:wght@300..700&family=Tektur:wdth,wght@75..100,400..900&display=swap"
@@ -108,7 +110,7 @@ def markdown(text: str) -> str:
 
 
 def read_article(slug: str) -> dict:
-    raw = (SRC / "wiki" / f"{slug}.md").read_text(encoding="utf-8")
+    raw = (SRC / "wiki" / f"{slug}.md").read_text(encoding="utf-8").replace("{{byevpn}}", BYEVPN)
     _, front, body = raw.split("---", 2)
     meta = {}
     for line in front.strip().splitlines():
@@ -323,7 +325,7 @@ def main():
     versions = json.loads((SRC / "versions.json").read_text(encoding="utf-8"))
 
     home = (SRC / "pages" / "index.html").read_text(encoding="utf-8")
-    home = home.replace("{{versions_latest}}", versions_latest(versions, "")).replace("{{root}}", "")
+    home = home.replace("{{byevpn}}", BYEVPN).replace("{{versions_latest}}", versions_latest(versions, "")).replace("{{root}}", "")
     home = (home.replace("{{apk}}", APK).replace("{{apk_version}}", RELEASE["version"])
             .replace("{{apk_size}}", RELEASE["size"]).replace("{{apk_sha}}", RELEASE["sha256"])
             .replace("{{release_page}}", f'{REPO}/releases/tag/{RELEASE["tag"]}'))
