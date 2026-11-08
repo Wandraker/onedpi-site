@@ -26,7 +26,7 @@ keywords: telegram телеграм не подключается прокси m
 
 Если что-то не так, в «Диагностике» есть журнал: скопируй его и пришли вместе с отчётом. В отчёте есть строка `Telegram proxy` с числом соединений и ошибок.
 
-Идею мы подсмотрели у [tg-ws-proxy](https://github.com/Flowseal/tg-ws-proxy) от Flowseal, спасибо автору. Реализация в OneDPI своя. Если встроенный прокси у тебя не заработал, можно попробовать отдельное приложение [tg-ws-proxy для Android](https://github.com/amurcanov/tg-ws-proxy-android).
+Идею мы подсмотрели у [tg-ws-proxy](https://github.com/Flowseal/tg-ws-proxy) от Flowseal, спасибо автору. Реализация в OneDPI своя. Часть серверов Telegram доступна только через ретрансляторы на Cloudflare: для них OneDPI использует открытый список ретрансляторов проекта tg-ws-proxy. Свои ретрансляторы мы планируем поднять отдельно. Если встроенный прокси у тебя не заработал, можно попробовать отдельное приложение [tg-ws-proxy для Android](https://github.com/amurcanov/tg-ws-proxy-android).
 
 ## Если нужен полный доступ: ByeVPN
 
