@@ -25,7 +25,7 @@ FONTS = "https://fonts.googleapis.com/css2?family=Geologica:wght@300..700&family
 WIKI = [
     ("start", "Начало", "flag", ["index", "install", "first-run", "statuses"]),
     ("inside", "Как это работает", "split", ["how-it-works", "smart", "profiles", "diagnostics"]),
-    ("trouble", "Если что-то не так", "wrench", ["sites", "telegram", "exclusions", "update"]),
+    ("trouble", "Если что-то не так", "wrench", ["sites", "telegram", "exclusions", "proxy-mode", "update"]),
     ("devices", "Устройства", "tv", ["android-tv"]),
     ("more", "Ещё", "dots", ["privacy", "faq"]),
 ]
