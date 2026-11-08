@@ -318,3 +318,9 @@ details.more ul { margin: 0.5rem 0 0; padding-left: 1.1rem; color: var(--muted);
   .wiki-pager { grid-template-columns: 1fr; }
   .wiki-pager .next { grid-column: 1; }
 }
+
+.hero-note a { color: inherit; }
+.checksum { margin-top: 1.25rem; color: var(--muted); font-size: 0.95rem; max-width: 40rem; }
+.checksum summary { cursor: pointer; width: fit-content; }
+.checksum p { margin: 0.5rem 0 0; }
+.checksum .sha { display: block; word-break: break-all; color: var(--ink); background: var(--paper-2); padding: 0.5rem 0.65rem; border-radius: 0.3rem; font-size: 0.85rem; }

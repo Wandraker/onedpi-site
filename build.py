@@ -14,6 +14,9 @@ ROOT = Path(__file__).resolve().parent
 SRC = ROOT / "src"
 DIST = ROOT / "dist"
 CHANNEL = "https://t.me/OneDPI"
+REPO = "https://github.com/Wandraker/onedpi-site"
+APK = f"{REPO}/releases/latest/download/OneDPI.apk"
+RELEASE = json.loads((Path(__file__).resolve().parent / "src" / "release.json").read_text(encoding="utf-8"))
 SITE = "https://wandraker.github.io/onedpi-site/"
 FONTS = "https://fonts.googleapis.com/css2?family=Geologica:wght@300..700&family=Tektur:wdth,wght@75..100,400..900&display=swap"
 
@@ -253,7 +256,7 @@ def page(body: str, title: str, desc: str, root: str, current: str) -> str:
   <div class="wrap">
     <a class="brand" href="{root}./"><img src="{root}assets/icon.svg" alt="" width="32" height="32">OneDPI</a>
     <div class="head-actions">
-      <a class="head-cta" href="{CHANNEL}">Скачать</a>
+      <a class="head-cta" href="{APK}">Скачать</a>
       <button class="menu-btn" type="button" aria-haspopup="dialog" aria-controls="drawer" data-menu-open>{ICONS["menu"]}<span>Меню</span></button>
     </div>
   </div>
@@ -321,6 +324,9 @@ def main():
 
     home = (SRC / "pages" / "index.html").read_text(encoding="utf-8")
     home = home.replace("{{versions_latest}}", versions_latest(versions, "")).replace("{{root}}", "")
+    home = (home.replace("{{apk}}", APK).replace("{{apk_version}}", RELEASE["version"])
+            .replace("{{apk_size}}", RELEASE["size"]).replace("{{apk_sha}}", RELEASE["sha256"])
+            .replace("{{release_page}}", f'{REPO}/releases/tag/{RELEASE["tag"]}'))
     (DIST / "index.html").write_text(page(home, "OneDPI",
         "OneDPI — Android-приложение, которое обходит DPI-блокировки прямо на телефоне. Без сервера, без аккаунта, одной кнопкой.",
         "", "index"), encoding="utf-8")
