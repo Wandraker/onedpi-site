@@ -348,6 +348,24 @@ def redirect(target: str) -> str:
 """
 
 
+def update_manifest():
+    """What the app's updater reads. Points at the tagged asset, so the checksum always matches the file."""
+    for key in ("versionCode", "sizeBytes", "changes"):
+        if key not in RELEASE:
+            raise SystemExit(f"src/release.json: missing {key!r} for update.json")
+    return {
+        "versionCode": RELEASE["versionCode"],
+        "version": RELEASE["version"],
+        "minVersionCode": RELEASE.get("minVersionCode", 0),
+        "url": f'{REPO}/releases/download/{RELEASE["tag"]}/OneDPI.apk',
+        "sha256": RELEASE["sha256"],
+        "sizeBytes": RELEASE["sizeBytes"],
+        "size": RELEASE["size"],
+        "date": RELEASE.get("date", ""),
+        "changes": RELEASE["changes"],
+    }
+
+
 def main():
     if DIST.exists():
         shutil.rmtree(DIST)
@@ -385,6 +403,7 @@ def main():
     (DIST / "help.html").write_text(page(moved_page("wiki/", "Вики"), "Страница переехала",
         "Справка OneDPI теперь в вики.", "", "moved"), encoding="utf-8")
     shutil.copy(ROOT / "LICENSE", DIST / "LICENSE")
+    (DIST / "update.json").write_text(json.dumps(update_manifest(), ensure_ascii=False, indent=2), encoding="utf-8")
     (DIST / ".nojekyll").write_text("", encoding="utf-8")
     print(f"built {len(order)} wiki pages, {len(versions)} versions -> {DIST}")
 
