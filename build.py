@@ -348,22 +348,37 @@ def redirect(target: str) -> str:
 """
 
 
-def update_manifest():
+def update_manifest(release=None, name="src/release.json"):
     """What the app's updater reads. Points at the tagged asset, so the checksum always matches the file."""
+    release = RELEASE if release is None else release
     for key in ("versionCode", "sizeBytes", "changes"):
-        if key not in RELEASE:
-            raise SystemExit(f"src/release.json: missing {key!r} for update.json")
+        if key not in release:
+            raise SystemExit(f"{name}: missing {key!r} for update.json")
     return {
-        "versionCode": RELEASE["versionCode"],
-        "version": RELEASE["version"],
-        "minVersionCode": RELEASE.get("minVersionCode", 0),
-        "url": f'{REPO}/releases/download/{RELEASE["tag"]}/OneDPI.apk',
-        "sha256": RELEASE["sha256"],
-        "sizeBytes": RELEASE["sizeBytes"],
-        "size": RELEASE["size"],
-        "date": RELEASE.get("date", ""),
-        "changes": RELEASE["changes"],
+        "versionCode": release["versionCode"],
+        "version": release["version"],
+        "minVersionCode": release.get("minVersionCode", 0),
+        "url": f'{REPO}/releases/download/{release["tag"]}/OneDPI.apk',
+        "sha256": release["sha256"],
+        "sizeBytes": release["sizeBytes"],
+        "size": release["size"],
+        "date": release.get("date", ""),
+        "changes": release["changes"],
     }
+
+
+def experimental_manifest():
+    """
+    update-experimental.json, for people who chose the experimental channel in the app (0.3.1+).
+    It is src/experimental.json while that build is newer than the release; otherwise the release
+    itself, so the channel never offers something older than what everyone has.
+    """
+    path = SRC / "experimental.json"
+    if path.exists():
+        experimental = json.loads(path.read_text(encoding="utf-8"))
+        if experimental.get("versionCode", 0) > RELEASE["versionCode"]:
+            return update_manifest(experimental, "src/experimental.json")
+    return update_manifest()
 
 
 def main():
@@ -404,6 +419,7 @@ def main():
         "Справка OneDPI теперь в вики.", "", "moved"), encoding="utf-8")
     shutil.copy(ROOT / "LICENSE", DIST / "LICENSE")
     (DIST / "update.json").write_text(json.dumps(update_manifest(), ensure_ascii=False, indent=2), encoding="utf-8")
+    (DIST / "update-experimental.json").write_text(json.dumps(experimental_manifest(), ensure_ascii=False, indent=2), encoding="utf-8")
     (DIST / ".nojekyll").write_text("", encoding="utf-8")
     print(f"built {len(order)} wiki pages, {len(versions)} versions -> {DIST}")
 
