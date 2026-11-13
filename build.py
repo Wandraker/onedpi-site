@@ -127,9 +127,15 @@ def nice_date(iso: str) -> str:
     return f"{d} {MONTHS[m - 1]} {y}"
 
 
+CHANNEL_TAGS = {"experimental": "экспериментальная", "advanced": "расширенная"}
+
+
 def version_item(v: dict) -> str:
-    cls = f' class="{v["kind"]}"' if v.get("kind") else ""
+    kinds = [k for k in (v.get("kind"), f'ch-{v["channel"]}' if v.get("channel") else None) if k]
+    cls = f' class="{" ".join(kinds)}"' if kinds else ""
     tags = ""
+    if v.get("channel") in CHANNEL_TAGS:
+        tags += f'<span class="tag tag-{v["channel"]}">{CHANNEL_TAGS[v["channel"]]}</span>'
     if v.get("tag"):
         tags += f'<span class="tag">{esc(v["tag"])}</span>'
     if v.get("date"):
@@ -139,7 +145,8 @@ def version_item(v: dict) -> str:
 
 
 def versions_latest(versions: list, root: str) -> str:
-    shown = [v for v in versions if v.get("kind") != "pause"][-4:]
+    # Only what everyone has: experimental and advanced builds stay on the versions pages.
+    shown = [v for v in versions if v.get("kind") != "pause" and not v.get("channel")][-4:]
     items = "".join(version_item(v) for v in shown)
     return f"""<section class="section" id="versions">
     <div class="wrap">
@@ -153,14 +160,52 @@ def versions_latest(versions: list, root: str) -> str:
   </section>"""
 
 
-def versions_all(versions: list) -> str:
-    items = "".join(version_item(v) for v in versions)
+def series_of(num: str, previous: str) -> str:
+    """'0.3.2' -> '0.3', 'alpha12' -> 'alpha'; pauses, lessons and 'дальше' join the series before them."""
+    if num.startswith("alpha"):
+        return "alpha"
+    parts = num.split(".")
+    if len(parts) >= 2 and parts[0].isdigit() and parts[1].isdigit():
+        return f"{parts[0]}.{parts[1]}"
+    return previous
+
+
+def version_pages(versions: list) -> list:
+    """One page per series, newest first: [(series, file, tab label, entries)]."""
+    groups, current = {}, "alpha"
+    for v in versions:
+        current = series_of(v["num"], current)
+        groups.setdefault(current, []).append(v)
+    order = sorted(groups, key=lambda s: (-1, 0) if s == "alpha" else tuple(int(x) for x in s.split(".")), reverse=True)
+    pages = []
+    for i, s in enumerate(order):
+        name = "versions.html" if i == 0 else f"versions-{s}.html"
+        label = "Альфа" if s == "alpha" else s + (" · сейчас" if i == 0 else "")
+        pages.append((s, name, label, groups[s]))
+    return pages
+
+
+SERIES_NOTES = {
+    "alpha": "Первые сборки: от прототипа на ByeDPI до Smart, который сам подбирает способ обхода.",
+}
+
+
+def versions_all(pages: list, index: int) -> str:
+    series, _, _, entries = pages[index]
+    tabs = "".join(
+        f'<a class="ver-tab{" on" if i == index else ""}" href="{name}">{esc(label)}</a>'
+        for i, (_, name, label, _) in enumerate(pages)
+    )
+    note = SERIES_NOTES.get(series, f"Версии {series}. Сверху — самая новая.")
+    items = "".join(version_item(v) for v in entries)
     return f"""<section class="section">
     <div class="wrap">
       <div class="section-head">
         <h1 class="page-title">Все версии</h1>
-        <p>Каждая версия выходила после отзывов тестировщиков из России и Казахстана. Сверху — то, что сейчас, внизу — самое начало.</p>
+        <p>Каждая версия выходила после отзывов тестировщиков из России и Казахстана. Метка «экспериментальная» — сборка из экспериментального канала обновлений: её получили только те, кто его выбрал.</p>
       </div>
+      <nav class="ver-tabs" aria-label="Серии версий">{tabs}</nav>
+      <p class="timeline-note">{esc(note)}</p>
       <ol class="timeline">{items}</ol>
     </div>
   </section>"""
@@ -367,18 +412,21 @@ def update_manifest(release=None, name="src/release.json"):
     }
 
 
-def experimental_manifest():
+def channel_manifest(*names):
     """
-    update-experimental.json, for people who chose the experimental channel in the app (0.3.1+).
-    It is src/experimental.json while that build is newer than the release; otherwise the release
-    itself, so the channel never offers something older than what everyone has.
+    The update file of a channel: the newest build among the release and the channel files named
+    (src/experimental.json, src/advanced.json), so a channel never offers something older than
+    what everyone has. Experimental (0.3.1+) reads experimental + release; advanced (0.3.2+) reads
+    advanced + experimental + release.
     """
-    path = SRC / "experimental.json"
-    if path.exists():
-        experimental = json.loads(path.read_text(encoding="utf-8"))
-        if experimental.get("versionCode", 0) > RELEASE["versionCode"]:
-            return update_manifest(experimental, "src/experimental.json")
-    return update_manifest()
+    best, best_name = RELEASE, "src/release.json"
+    for n in names:
+        path = SRC / f"{n}.json"
+        if path.exists():
+            candidate = json.loads(path.read_text(encoding="utf-8"))
+            if candidate.get("versionCode", 0) > best["versionCode"]:
+                best, best_name = candidate, f"src/{n}.json"
+    return update_manifest(best, best_name)
 
 
 def main():
@@ -397,8 +445,11 @@ def main():
     (DIST / "index.html").write_text(page(home, "OneDPI",
         "OneDPI — Android-приложение, которое обходит DPI-блокировки прямо на телефоне. Без сервера, без аккаунта, одной кнопкой.",
         "", "index"), encoding="utf-8")
-    (DIST / "versions.html").write_text(page(versions_all(versions), "Все версии",
-        "История OneDPI от первой сборки до текущей версии.", "", "versions"), encoding="utf-8")
+    pages = version_pages(versions)
+    for i, (series, name, label, _) in enumerate(pages):
+        title = "Все версии" if i == 0 else f"Версии {'альфа' if series == 'alpha' else series}"
+        (DIST / name).write_text(page(versions_all(pages, i), title,
+            "История OneDPI от первой сборки до текущей версии.", "", "versions"), encoding="utf-8")
 
     order = [s for _, _, _, slugs in WIKI for s in slugs]
     articles = {s: read_article(s) for s in order}
@@ -419,7 +470,8 @@ def main():
         "Справка OneDPI теперь в вики.", "", "moved"), encoding="utf-8")
     shutil.copy(ROOT / "LICENSE", DIST / "LICENSE")
     (DIST / "update.json").write_text(json.dumps(update_manifest(), ensure_ascii=False, indent=2), encoding="utf-8")
-    (DIST / "update-experimental.json").write_text(json.dumps(experimental_manifest(), ensure_ascii=False, indent=2), encoding="utf-8")
+    (DIST / "update-experimental.json").write_text(json.dumps(channel_manifest("experimental"), ensure_ascii=False, indent=2), encoding="utf-8")
+    (DIST / "update-advanced.json").write_text(json.dumps(channel_manifest("advanced", "experimental"), ensure_ascii=False, indent=2), encoding="utf-8")
     (DIST / ".nojekyll").write_text("", encoding="utf-8")
     print(f"built {len(order)} wiki pages, {len(versions)} versions -> {DIST}")
 
