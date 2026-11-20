@@ -18,6 +18,8 @@ REPO = "https://github.com/Wandraker/onedpi-site"
 APK = f"{REPO}/releases/latest/download/OneDPI.apk"
 # Платный VPN той же команды. Когда появится бот, заменить на ссылку t.me/<бот>.
 BYEVPN = "https://byevpn.byevpn.workers.dev/"
+# The bot opens where the workers.dev site may not: from Russia it often does not.
+BYEVPN_BOT = "https://t.me/ByeVPNRobot"
 RELEASE = json.loads((Path(__file__).resolve().parent / "src" / "release.json").read_text(encoding="utf-8"))
 SITE = "https://wandraker.github.io/onedpi-site/"
 FONTS = "https://fonts.googleapis.com/css2?family=Geologica:wght@300..700&family=Tektur:wdth,wght@75..100,400..900&display=swap"
@@ -110,7 +112,7 @@ def markdown(text: str) -> str:
 
 
 def read_article(slug: str) -> dict:
-    raw = (SRC / "wiki" / f"{slug}.md").read_text(encoding="utf-8").replace("{{byevpn}}", BYEVPN)
+    raw = (SRC / "wiki" / f"{slug}.md").read_text(encoding="utf-8").replace("{{byevpn}}", BYEVPN).replace("{{byevpn_bot}}", BYEVPN_BOT)
     _, front, body = raw.split("---", 2)
     meta = {}
     for line in front.strip().splitlines():
@@ -241,6 +243,15 @@ def wiki_cards(articles: dict) -> str:
     return "\n".join(out)
 
 
+VPN_ASIDE = f"""<aside class="beyond beyond-wiki" aria-label="ByeVPN">
+    <div>
+      <h3>🚀 Не работает обход?</h3>
+      <p>Если сайт заблокирован по адресу, как сейчас Telegram, или провайдер закрыл все приёмы, поможет только VPN. <strong>ByeVPN</strong> — 7 дней бесплатно, потом 149 ₽ в месяц, без ограничений по трафику и числу устройств.</p>
+    </div>
+    <div class="beyond-actions"><a class="button button-light" href="{BYEVPN_BOT}">Попробовать бесплатно</a><a class="beyond-link" href="{BYEVPN}">Сайт ByeVPN</a></div>
+  </aside>"""
+
+
 def wiki_page(articles: dict, order: list, slug: str) -> str:
     a = articles[slug]
     i = order.index(slug)
@@ -259,6 +270,7 @@ def wiki_page(articles: dict, order: list, slug: str) -> str:
 <article class="wiki-content" data-wiki-article>
   <header class="wiki-head"><h1>{esc(a["title"])}</h1><p class="lead">{inline(a["lead"])}</p></header>
   {body}
+  {"" if slug == "index" else VPN_ASIDE}
   <nav class="wiki-pager" aria-label="Соседние статьи">{pager}</nav>
 </article>
 {toc}
@@ -438,7 +450,7 @@ def main():
     versions = json.loads((SRC / "versions.json").read_text(encoding="utf-8"))
 
     home = (SRC / "pages" / "index.html").read_text(encoding="utf-8")
-    home = home.replace("{{byevpn}}", BYEVPN).replace("{{versions_latest}}", versions_latest(versions, "")).replace("{{root}}", "")
+    home = home.replace("{{byevpn}}", BYEVPN).replace("{{byevpn_bot}}", BYEVPN_BOT).replace("{{versions_latest}}", versions_latest(versions, "")).replace("{{root}}", "")
     home = (home.replace("{{apk}}", APK).replace("{{apk_version}}", RELEASE["version"])
             .replace("{{apk_size}}", RELEASE["size"]).replace("{{apk_sha}}", RELEASE["sha256"])
             .replace("{{release_page}}", f'{REPO}/releases/tag/{RELEASE["tag"]}'))

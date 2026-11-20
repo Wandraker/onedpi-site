@@ -213,6 +213,12 @@ body.drawer-open { overflow: hidden; }
 .beyond h3 { color: var(--paper); margin-bottom: 0.5rem; }
 .beyond p { margin: 0; color: color-mix(in srgb, var(--paper) 82%, transparent); }
 .beyond strong { color: var(--packet); font-weight: 600; }
+.beyond-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.25rem; }
+.beyond-link { color: var(--paper); text-decoration: underline; text-underline-offset: 0.2em; }
+.beyond-wiki { margin-top: 2.5rem; }
+.vpn-strip { flex: 1 1 100%; display: flex; flex-wrap: wrap; gap: 0.25rem 0.5rem; align-items: baseline; max-width: 40rem; padding: 0.8rem 1.1rem; border-radius: 0.75rem; background: var(--packet); color: var(--packet-ink); text-decoration: none; line-height: 1.35; box-shadow: 0.25rem 0.25rem 0 var(--signal); }
+.vpn-strip strong { font-weight: 700; }
+.vpn-strip:hover { box-shadow: 0.35rem 0.35rem 0 var(--signal); }
 .button-light { background: var(--packet); color: var(--packet-ink); box-shadow: 0.25rem 0.25rem 0 var(--signal); }
 .button-light:hover { box-shadow: 0.35rem 0.35rem 0 var(--signal); }
 
